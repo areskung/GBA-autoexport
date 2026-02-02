@@ -6,38 +6,49 @@
     <title>GBA Auto Export - GAC Nansha Port Direct Source</title>
     <meta name="description" content="Premium Auto Supply Chain from GAC Nansha Port. BYD, Toyota, Geely, Zeekr Wholesale Export.">
     
-    <!-- 引入 Tailwind CSS (云端版) -->
+    <!-- 引入 Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- 引入 React 和 Babel (让浏览器能看懂我们的代码) -->
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- 引入 React 和 ReactDOM (传统 UMD 版本，最稳定，不会报错) -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     
-    <!-- 配置云端依赖包 (Import Map) -->
-    <script type="importmap">
-      {
-        "imports": {
-          "react": "https://esm.sh/react@18.2.0",
-          "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
-          "lucide-react": "https://esm.sh/lucide-react?alias=react:react"
-        }
-      }
-    </script>
+    <!-- 引入 Babel (用于解析 JSX) -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
     <style>
-        /* 平滑滚动 */
         html { scroll-behavior: smooth; }
     </style>
 </head>
 <body class="bg-slate-50">
     <div id="root"></div>
 
-    <!-- 这里的 type="text/babel" 很重要，它告诉浏览器这是 React 代码 -->
-    <script type="text/babel" data-type="module">
-        import React, { useState, useEffect } from 'react';
-        import { createRoot } from 'react-dom/client';
-        // 从云端直接引入图标库
-        import { Phone, Mail, MapPin, Ship, ShieldCheck, Container, ChevronRight, Menu, X, CheckCircle, ArrowRight } from 'lucide-react';
+    <!-- 这里的 type="text/babel" 告诉浏览器这是 React 代码 -->
+    <script type="text/babel">
+        const { useState, useEffect } = React;
 
+        // --- 1. 内置图标组件 (彻底移除 lucide-react 依赖，防止白屏) ---
+        // 通用 SVG 容器
+        const IconWrapper = ({ children, className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                {children}
+            </svg>
+        );
+
+        // 手动定义所有用到的图标
+        const Phone = ({className}) => <IconWrapper className={className}><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></IconWrapper>;
+        const Mail = ({className}) => <IconWrapper className={className}><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path></IconWrapper>;
+        const MapPin = ({className}) => <IconWrapper className={className}><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></IconWrapper>;
+        const Ship = ({className}) => <IconWrapper className={className}><path d="M2 21c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1 .6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"></path><path d="M19.38 20A11.6 11.6 0 0 0 21 14l-9-4-9 4c0 2.9.9 5.8 2.5 8"></path><path d="M10 10V4a2 2 0 0 1 2-2h1a2 2 0 0 1 2 2v6"></path></IconWrapper>;
+        const ShieldCheck = ({className}) => <IconWrapper className={className}><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"></path><path d="m9 12 2 2 4-4"></path></IconWrapper>;
+        const ContainerIcon = ({className}) => <IconWrapper className={className}><path d="M20 7h-9"></path><path d="M14 17H5"></path><rect x="3" y="7" width="18" height="10" rx="2"></rect></IconWrapper>; // 简化的集装箱图标
+        const ChevronRight = ({className}) => <IconWrapper className={className}><path d="m9 18 6-6-6-6"></path></IconWrapper>;
+        const Menu = ({className}) => <IconWrapper className={className}><line x1="4" x2="20" y1="12" y2="12"></line><line x1="4" x2="20" y1="6" y2="6"></line><line x1="4" x2="20" y1="18" y2="18"></line></IconWrapper>;
+        const X = ({className}) => <IconWrapper className={className}><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></IconWrapper>;
+        const CheckCircle = ({className}) => <IconWrapper className={className}><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><path d="m9 11 3 3L22 4"></path></IconWrapper>;
+        const ArrowRight = ({className}) => <IconWrapper className={className}><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></IconWrapper>;
+
+        // --- 2. 主应用程序 ---
         const App = () => {
           const [isScrolled, setIsScrolled] = useState(false);
           const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -85,7 +96,7 @@
                       </a>
                     ))}
                     <a href="#contact" className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-full font-medium text-sm transition-all shadow-lg flex items-center">
-                      <Phone size={16} className="mr-2" />
+                      <Phone className="w-4 h-4 mr-2" />
                       WhatsApp Us
                     </a>
                   </div>
@@ -93,7 +104,7 @@
                   {/* Mobile Menu Button */}
                   <div className="md:hidden">
                     <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className={`${isScrolled ? 'text-slate-800' : 'text-white'}`}>
-                      {mobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+                      {mobileMenuOpen ? <X className="w-7 h-7" /> : <Menu className="w-7 h-7" />}
                     </button>
                   </div>
                 </div>
@@ -114,7 +125,7 @@
               <section id="home" className="relative h-screen flex items-center justify-center overflow-hidden">
                 {/* Background Image Placeholder */}
                 <div className="absolute inset-0 bg-slate-900">
-                   {/* 这是一个模拟背景，实际部署时换成你的图片 URL */}
+                   {/* 模拟背景 - 注意：上线时请替换为您拍摄的南沙港照片 URL */}
                    <img 
                     src="https://images.unsplash.com/photo-1565043666747-69f6646db940?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" 
                     alt="Nansha Port Car Export" 
@@ -141,7 +152,7 @@
                     </a>
                     <a href="#contact" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-full font-bold text-lg transition-all flex items-center justify-center border border-blue-500">
                       Get Price List
-                      <ArrowRight size={20} className="ml-2" />
+                      <ArrowRight className="w-5 h-5 ml-2" />
                     </a>
                   </div>
                 </div>
@@ -180,17 +191,17 @@
                   <div className="grid md:grid-cols-3 gap-10">
                     {[
                       { 
-                        icon: <Ship size={40} className="text-blue-600" />, 
+                        icon: <Ship className="w-10 h-10 text-blue-600" />, 
                         title: "Direct Port Access", 
                         desc: "Located minutes away from Nansha Port. We handle loading and customs faster than inland suppliers." 
                       },
                       { 
-                        icon: <Container size={40} className="text-blue-600" />, 
+                        icon: <ContainerIcon className="w-10 h-10 text-blue-600" />, 
                         title: "Physical Stock", 
                         desc: "Real inventory you can see via video call. We are not brokers; we control the supply chain." 
                       },
                       { 
-                        icon: <ShieldCheck size={40} className="text-blue-600" />, 
+                        icon: <ShieldCheck className="w-10 h-10 text-blue-600" />, 
                         title: "B2B Professionalism", 
                         desc: "We understand export docs, homologation, and spare parts. Dedicated English support for dealers." 
                       }
@@ -256,14 +267,14 @@
                           </div>
                           
                           <div className="flex items-center space-x-4 text-sm text-slate-500 mb-6">
-                            <span className="flex items-center"><CheckCircle size={14} className="mr-1 text-green-500" /> {car.type}</span>
-                            <span className="flex items-center"><CheckCircle size={14} className="mr-1 text-green-500" /> {car.fuel}</span>
+                            <span className="flex items-center"><CheckCircle className="w-4 h-4 mr-1 text-green-500" /> {car.type}</span>
+                            <span className="flex items-center"><CheckCircle className="w-4 h-4 mr-1 text-green-500" /> {car.fuel}</span>
                           </div>
 
                           <div className="flex items-center justify-between pt-4 border-t border-slate-100">
                             <span className="text-slate-400 text-sm">MOQ: 3 Units</span>
                             <button className="text-blue-600 font-bold hover:text-blue-800 flex items-center text-sm">
-                              Get Quote <ChevronRight size={16} />
+                              Get Quote <ChevronRight className="w-4 h-4" />
                             </button>
                           </div>
                         </div>
@@ -273,7 +284,7 @@
 
                   <div className="text-center mt-12">
                     <a href="#contact" className="inline-flex items-center text-slate-600 font-medium hover:text-blue-600 transition-colors">
-                      Download Full Catalog PDF <ArrowRight size={16} className="ml-2" />
+                      Download Full Catalog PDF <ArrowRight className="w-4 h-4 ml-2" />
                     </a>
                   </div>
                 </div>
@@ -295,7 +306,7 @@
                       <div className="space-y-6">
                         <div className="flex items-start">
                           <div className="bg-blue-800 p-3 rounded-lg mr-4">
-                            <MapPin className="text-blue-300" />
+                            <MapPin className="text-blue-300 w-6 h-6" />
                           </div>
                           <div>
                             <h4 className="font-bold text-lg">Visit Us</h4>
@@ -305,7 +316,7 @@
                         
                         <div className="flex items-start">
                           <div className="bg-blue-800 p-3 rounded-lg mr-4">
-                            <Mail className="text-blue-300" />
+                            <Mail className="text-blue-300 w-6 h-6" />
                           </div>
                           <div>
                             <h4 className="font-bold text-lg">Email Us</h4>
@@ -336,7 +347,7 @@
                           </select>
                         </div>
                         <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-lg transition-all shadow-lg flex justify-center items-center">
-                          Request Quote on WhatsApp <Phone size={18} className="ml-2" />
+                          Request Quote on WhatsApp <Phone className="w-5 h-5 ml-2" />
                         </button>
                       </form>
                     </div>
@@ -361,7 +372,7 @@
           );
         };
 
-        const root = createRoot(document.getElementById('root'));
+        const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<App />);
     </script>
 </body>
